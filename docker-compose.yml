@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+
+  api_end:
+    shm_size: '1000000000'
+    build:
+      context: api
+    tty: true
+    volumes:
+      - '~/docker_app:/app'
+
+  nginx:
+    build: nginx
+    tty: true
+    links:
+      - api_end
+    ports:
+      - '8084:80'
