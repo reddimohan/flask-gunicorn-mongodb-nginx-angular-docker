@@ -92,4 +92,7 @@ class Todo(Resource):
 
 
 if __name__ == '__main__':
+    print(" ** Starting flask app...")
     app.run(debug=True)
+    print(" ** Started flask app!")
+

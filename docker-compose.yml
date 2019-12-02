@@ -2,18 +2,24 @@ version: '3.7'
 
 services:
 
-  api_end:
+  flask-api:
     shm_size: '1000000000'
+    image: api_img
+    container_name: ai_api
     build:
       context: api
     tty: true
     volumes:
-      - '~/docker_app:/app'
+      - ~/docker_app/api:/app/logs
+    expose: 
+      - 5000
 
   nginx:
     build: nginx
+    image: nginx_img
+    container_name: ai_nginx
     tty: true
-    links:
-      - api_end
     ports:
-      - '8084:80'
+      - '80:80'
+    volumes:
+      - ~/docker_app/nginx:/var/log/nginx/

@@ -21,4 +21,6 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Finally, run the app with Gunicorn command
-CMD [ "gunicorn", "-b", "0.0.0.0:5000", "wsgi:app" ]
+# CMD [ "gunicorn", "-b", "0.0.0.0:5000", "wsgi:app" ]
+CMD [ "gunicorn", "-c", "gunicorn.conf.py", "wsgi:app" ]
+# CMD [ "python", "app.py" ]
