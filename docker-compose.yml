@@ -2,24 +2,55 @@ version: '3.7'
 
 services:
 
-  flask-api:
-    shm_size: '1000000000'
-    image: api_img
-    container_name: ai_api
-    build:
-      context: api
-    tty: true
+  # flask-api:
+  #   image: api_img
+  #   container_name: ai_api
+  #   build:
+  #     context: api
+  #   tty: true
+  #   volumes:
+  #     - ~/docker_app/api/logs:/app/logs
+  #     - ./api/models:/app/models
+  #   environment:
+  #     MONGODB_DATABASE: ai_evaluator 
+  #     MONGODB_USERNAME: admin
+  #     MONGODB_PASSWORD: mohan
+  #     MONGODB_HOSTNAME: mongodb
+  #     AUTH_DB: admin
+  
+  web_app:
+    image: web_app_img
+    container_name: web_app
+    build: 
+      context: web
     volumes:
-      - ~/docker_app/api:/app/logs
-    expose: 
-      - 5000
-
-  nginx:
-    build: nginx
-    image: nginx_img
-    container_name: ai_nginx
-    tty: true
+      - ./web/dist/web/:/usr/share/nginx/html:ro
     ports:
       - '80:80'
-    volumes:
-      - ~/docker_app/nginx:/var/log/nginx/
+  
+  # mongodb:
+  #   image: mongo:4.0.8
+  #   container_name: mongodb
+  #   restart: unless-stopped
+  #   command: mongod --auth
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: admin
+  #     MONGO_INITDB_ROOT_PASSWORD: mohan
+  #     MONGO_INITDB_DATABASE: ai_evaluator
+  #     MONGODB_DATA_DIR: /data/db
+  #     MONDODB_LOG_DIR: /dev/null
+  #   volumes:
+  #     - ~/docker_app/mongodb:/data/db
+
+  # nginx:
+  #   build: nginx
+  #   image: nginx_img
+  #   container_name: ai_nginx
+  #   depends_on:
+  #     - flask-api
+  #   tty: true
+  #   ports:
+  #     - '80:80'
+  #     - '443:443'
+  #   volumes:
+  #     - ~/docker_app/nginx/logs:/var/log/nginx
