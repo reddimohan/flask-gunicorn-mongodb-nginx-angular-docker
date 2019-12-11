@@ -2,15 +2,15 @@ version: '3.7'
 
 services:
 
-  # flask-api:
-  #   image: api_img
-  #   container_name: ai_api
-  #   build:
-  #     context: api
-  #   tty: true
-  #   volumes:
-  #     - ~/docker_app/api/logs:/app/logs
-  #     - ./api/models:/app/models
+  flask-api:
+    image: flask_api_img
+    container_name: api
+    build:
+      context: api
+    tty: true
+    volumes:
+      - ~/docker_app/logs/api:/app/logs
+      - ./api/models:/app/models
   #   environment:
   #     MONGODB_DATABASE: ai_evaluator 
   #     MONGODB_USERNAME: admin
@@ -18,13 +18,26 @@ services:
   #     MONGODB_HOSTNAME: mongodb
   #     AUTH_DB: admin
   
+  
+  nginx:
+    build: nginx
+    image: nginx_img
+    container_name: ai_nginx
+    depends_on:
+      - flask-api
+    tty: true
+    ports:
+      - '5000:80'
+    volumes:
+      - ~/docker_app/logs/nginx/:/var/log/nginx
+  
   web_app:
-    image: web_app_img
-    container_name: web_app
+    image: webapp_img
+    container_name: angular_app
     build: 
       context: web
     volumes:
-      - ./web/dist/web/:/usr/share/nginx/html:ro
+      - ~/docker_app/logs/webapp:/var/log/nginx
     ports:
       - '80:80'
   
@@ -42,15 +55,5 @@ services:
   #   volumes:
   #     - ~/docker_app/mongodb:/data/db
 
-  # nginx:
-  #   build: nginx
-  #   image: nginx_img
-  #   container_name: ai_nginx
-  #   depends_on:
-  #     - flask-api
-  #   tty: true
-  #   ports:
-  #     - '80:80'
-  #     - '443:443'
-  #   volumes:
-  #     - ~/docker_app/nginx/logs:/var/log/nginx
+
+  
