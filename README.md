@@ -26,5 +26,17 @@ Docker run image and ssh to the container and remove container on terminal Exit
 Dockercompose command to build and run the container
 `$ docker-compose up --build --detach`
 
+##### Create new mongodb user for the flask API to use
+```sh
+## Create DB name before calling the Flask APIs based on your docker-compose.yml file configuration at 'flask-api' service
 
+use mo
+db.createUser(
+  {
+    user: "test",
+    pwd: "test",
+    roles: [ { role: "readWrite", db: "mo" } ]
+  }
+)
+```
 

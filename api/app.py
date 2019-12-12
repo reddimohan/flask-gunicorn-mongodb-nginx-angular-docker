@@ -3,18 +3,16 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_restplus import Api, Resource, fields
 from flask_pymongo import PyMongo
-from werkzeug.contrib.fixers import ProxyFix
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app)
 
 # MongoDB connection
 app.config["MONGO_URI"] = 'mongodb://' + os.environ['MONGODB_USERNAME'] + ':' + os.environ['MONGODB_PASSWORD'] + '@' + os.environ['MONGODB_HOSTNAME'] + ':27017/' + os.environ['MONGODB_DATABASE']
-print(os.environ)
+
 mongo = PyMongo(app)
 db = mongo.db
-print(db)
-CORS(app)
 
 api = Api(app, version='1.0', title='TodoMVC API',
     description='A simple TodoMVC API',
@@ -31,12 +29,12 @@ todo = api.model('Todo', {
 @ns.route('/')
 class TodoList(Resource):
     '''Shows a list of all todos, and lets you POST to add new tasks'''
-    @ns.doc('list_todos')
-    @ns.marshal_list_with(todo)
+    # @ns.doc('list_todos')
+    # @ns.marshal_list_with(todo)
     def get(self):
         '''List all tasks'''
         _todos = db.todo.find()
-
+        print('SUdo')
         item = {}
         data = []
         for todo in _todos:
@@ -45,20 +43,18 @@ class TodoList(Resource):
                 'todo': todo['todo']
             }
             data.append(item)
-
         return jsonify(
-            status=True,
+            # status=True,
             data=data
         )
 
-    @ns.doc('create_todo')
     @ns.expect(todo)
     @ns.marshal_with(todo, code=201)
     def post(self):
         '''Create a new task'''
         data = request.get_json(force=True)
         item = {
-            'todo': data['todo']
+            'todo': data['task']
         }
         db.todo.insert_one(item)
 
@@ -69,7 +65,7 @@ class TodoList(Resource):
 
 
 if __name__ == '__main__':
-    ENVIRONMENT_DEBUG = os.environ.get("APP_DEBUG", True)
-    ENVIRONMENT_PORT = os.environ.get("APP_PORT", 5000)
+    ENVIRONMENT_DEBUG = os.environ.get("APP_DEBUG", False)
+    ENVIRONMENT_PORT = os.environ.get("APP_PORT", 7000)
     app.run(debug=ENVIRONMENT_DEBUG, port=ENVIRONMENT_PORT)
 

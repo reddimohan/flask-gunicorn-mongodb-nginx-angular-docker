@@ -16,11 +16,10 @@ services:
       APP_ENV: "prod"
       APP_DEBUG: "False"
       APP_PORT: 5000
-      MONGODB_DATABASE: ai_evaluator 
-      MONGODB_USERNAME: admin
-      MONGODB_PASSWORD: mohan
+      MONGODB_DATABASE: mo 
+      MONGODB_USERNAME: test
+      MONGODB_PASSWORD: test
       MONGODB_HOSTNAME: mongodb
-      AUTH_DB: ai_evaluator
     # Dont start flask until mongodb works
     depends_on:
       - mongodb
@@ -33,7 +32,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: mohan
-      MONGO_INITDB_DATABASE: ai_evaluator
+      MONGO_INITDB_DATABASE: admin
       MONGODB_DATA_DIR: /data/db
       MONDODB_LOG_DIR: /dev/null
     volumes:
@@ -53,16 +52,16 @@ services:
     volumes:
       - ~/docker_app/logs/nginx/:/var/log/nginx
   
-  # web_app:
-  #   image: webapp_img
-  #   container_name: angular_app
-  #   restart: unless-stopped
-  #   build: 
-  #     context: web
-  #   volumes:
-  #     - ~/docker_app/logs/webapp:/var/log/nginx
-  #   ports:
-  #     - '80:80'
+  web_app:
+    image: webapp_img
+    container_name: angular_app
+    restart: unless-stopped
+    build: 
+      context: web
+    volumes:
+      - ~/docker_app/logs/webapp:/var/log/nginx
+    ports:
+      - '80:80'
   
 
 
