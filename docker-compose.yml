@@ -30,6 +30,7 @@ services:
     restart: unless-stopped
     command: mongod --auth
     environment:
+      ## Creating admin user with root access and later we use this to create db level authentication
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: mohan
       MONGO_INITDB_DATABASE: admin
@@ -62,7 +63,3 @@ services:
       - ~/docker_app/logs/webapp:/var/log/nginx
     ports:
       - '80:80'
-  
-
-
-  

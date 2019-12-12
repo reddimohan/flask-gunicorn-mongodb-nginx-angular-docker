@@ -10,10 +10,10 @@ $ docker-compose --version
 docker-compose version 1.25.0, build 0a186604
 ```
 
-##### Setup
-- Can be found 
+#### Setup
+- coming soon...
 
-##### Docker commands used in the project
+#### Docker commands used in the project
 Build image:
 `$ docker build --tag image_name .`
 
@@ -26,7 +26,7 @@ Docker run image and ssh to the container and remove container on terminal Exit
 Dockercompose command to build and run the container
 `$ docker-compose up --build --detach`
 
-##### Create new mongodb user for the flask API to use
+#### Create new mongodb user for the flask API to use
 ```sh
 ## Create DB name before calling the Flask APIs based on your docker-compose.yml file configuration at 'flask-api' service
 
